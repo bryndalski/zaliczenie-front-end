@@ -22,16 +22,18 @@
     "@types/node": "^16.18.112",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
+    "lodash": "^4.17.21",
+    "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.13",
+    "styles": "link:@mui/material/styles",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
-    "lodash": "^4.17.21",
     "zod": "^3.22.4",
-    "zustand": "^4.5.2",
-    "styles": "link:@mui/material/styles"
+    "zustand": "^4.5.2"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +55,7 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@typescript-eslint/parser": "^8.8.0",
     "eslint": "8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",
