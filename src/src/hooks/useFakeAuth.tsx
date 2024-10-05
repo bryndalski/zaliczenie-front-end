@@ -4,7 +4,7 @@ import { useCreateInsecureToken } from './useCreateInsecureToken';
 export const useFakeAuth = () => {
   const { signAccessToken } = useCreateInsecureToken();
 
-  const singIn = async () => {
+  const signIn = async () => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(signAccessToken(User.createFakeUser()));
@@ -15,7 +15,7 @@ export const useFakeAuth = () => {
   const signOut = () => {};
 
   return {
-    singIn,
+    signIn,
     signOut,
   };
 };
