@@ -1,18 +1,35 @@
-import { User } from '../utils/User';
-import { useCreateInsecureToken } from './useCreateInsecureToken';
+import { decodeToken } from 'react-jwt';
+
+import { useUserStore } from '../stores/useUserStore/useUserStore';
 
 export const useFakeAuth = () => {
-  const { signAccessToken } = useCreateInsecureToken();
+  const { setTokenPayload, setIsLogged } = useUserStore();
 
-  const signIn = async () => {
+  const signIn = async (accessToken: string) => {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(signAccessToken(User.createFakeUser()));
-      }, 1000);
+      try {
+        const decoded = decodeToken(accessToken);
+
+        if (decoded) {
+          setTokenPayload(decoded);
+          setIsLogged(true);
+
+          resolve(true);
+        } else {
+          alert('Invalid token');
+        }
+      } catch (error: unknown) {
+        if (error instanceof Error) alert(`Invalid token - error ${error}`);
+
+        alert('Invalid token - unknown error');
+      }
     });
   };
 
-  const signOut = () => {};
+  const signOut = () => {
+    setTokenPayload(null);
+    setIsLogged(false);
+  };
 
   return {
     signIn,

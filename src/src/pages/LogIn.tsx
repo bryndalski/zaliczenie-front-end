@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Box, Button, Input, Typography } from '@mui/material';
 
@@ -7,6 +7,8 @@ import { User } from '../utils/User';
 import { Jwt } from '../utils/jwt/Jwt';
 
 export const LogIn = () => {
+  const [token, setToken] = useState<string>('');
+
   const { signIn } = useFakeAuth();
 
   return (
@@ -30,7 +32,7 @@ export const LogIn = () => {
       }}
     >
       <Typography variant="h3" component="h1" gutterBottom>
-        Potrzebujemy token
+        Podaj
       </Typography>
       <span>
         Poniewż generowanie tokenów możliwe jest do wykonania tylko na serwerze,
@@ -62,9 +64,12 @@ export const LogIn = () => {
           border: '1px solid #ccc',
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
         }}
+        onChange={(e) => {
+          setToken(e.target.value);
+        }}
       />
       <Button
-        onClick={signIn}
+        onClick={() => void signIn(token)}
         variant="contained"
         color="primary"
         sx={{
