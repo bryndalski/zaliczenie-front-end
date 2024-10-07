@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useDebugValue, useState } from 'react';
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser';
 
 import { Box, Button, Input, Typography } from '@mui/material';
 
@@ -8,6 +9,17 @@ import { Jwt } from '../utils/jwt/Jwt';
 
 export const LogIn = () => {
   const { signIn } = useFakeAuth();
+  const [token, setToken] = useState('');
+
+  const auth = useAuthUser();
+
+  const handleSignIn = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    signIn(token);
+  };
+
+  // eslint-disable-next-line no-console
+  useDebugValue(console.log({ auth }));
 
   return (
     <Box
@@ -55,6 +67,8 @@ export const LogIn = () => {
 
       <Input
         placeholder="Enter your token"
+        value={token}
+        onChange={(e) => setToken(e.target.value)}
         sx={{
           width: '100%',
           padding: '10px',
@@ -64,7 +78,7 @@ export const LogIn = () => {
         }}
       />
       <Button
-        onClick={signIn}
+        onClick={handleSignIn}
         variant="contained"
         color="primary"
         sx={{

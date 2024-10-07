@@ -2,7 +2,7 @@ import { User } from '../User';
 
 export class Jwt {
   static get url() {
-    return 'https://www.javainuse.com/createJwt';
+    return 'https://www.javainuse.com/jwtgenerator';
   }
 
   static createPayload(payload: User) {

@@ -1,18 +1,33 @@
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
+import { redirect } from 'react-router-dom';
+
 import { User } from '../utils/User';
-import { useCreateInsecureToken } from './useCreateInsecureToken';
 
 export const useFakeAuth = () => {
-  const { signAccessToken } = useCreateInsecureToken();
+  const signInAuthKit = useSignIn();
 
-  const signIn = async () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(signAccessToken(User.createFakeUser()));
-      }, 1000);
-    });
+  const signIn = (token: string) => {
+    if (
+      signInAuthKit({
+        auth: {
+          token: token,
+          type: 'Bearer',
+        },
+        userState: {
+          loggedIn: true,
+          ...User.createFakeUser(),
+        },
+      })
+    ) {
+      redirect('/admin');
+    } else {
+      alert('invalid token');
+    }
   };
 
-  const signOut = () => {};
+  const signOut = () => {
+    // Implement sign-out logic if needed
+  };
 
   return {
     signIn,

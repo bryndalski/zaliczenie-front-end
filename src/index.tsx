@@ -1,22 +1,27 @@
 import React from 'react';
+import AuthProvider from 'react-auth-kit';
+import createStore from 'react-auth-kit/createStore';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 
-import { Buffer } from 'buffer';
-import process from 'process';
-
 import { App } from './App';
 
-window.Buffer = Buffer;
-window.process = process;
+const store = createStore({
+  authName: '_auth',
+  authType: 'cookie',
+  cookieDomain: 'localhost',
+  cookieSecure: false,
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <AuthProvider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthProvider>
   </React.StrictMode>,
 );
