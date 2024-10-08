@@ -1,15 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Paper, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 
 const AuthorizedPage = () => {
-  const navigate = useNavigate();
-
-  const handleNavigation = () => {
-    navigate('/some-other-page');
-  };
-
   return (
     <Box
       sx={{
@@ -45,14 +38,6 @@ const AuthorizedPage = () => {
         <Typography variant="body1" gutterBottom>
           Welcome to the authorized page.
         </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleNavigation}
-          sx={{ marginTop: 2 }}
-        >
-          Go to Another Page
-        </Button>
       </Paper>
     </Box>
   );
