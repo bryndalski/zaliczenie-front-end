@@ -1,92 +1,61 @@
 import React, { useState } from 'react';
 
-import { Box, Button, Input, Typography } from '@mui/material';
+import { Button, Container, Typography } from '@mui/material';
 
-import { useFakeAuth } from '../hooks/useFakeAuth';
-import { User } from '../utils/User';
-import { Jwt } from '../utils/jwt/Jwt';
+const TokenPage = () => {
+  const [token, setToken] = useState<string | null>(null);
 
-export const LogIn = () => {
-  const [token, setToken] = useState<string>('');
+  const handleGetToken = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/token', {
+        method: 'POST',
+      });
 
-  const { signIn } = useFakeAuth();
+      console.log({ response });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      setToken(data?.accessToken);
+      alert(`Token: ${data.accessToken}`);
+    } catch (error) {
+      console.error('Error fetching token:', error);
+    }
+  };
+
+  const handleRedirect = () => {
+    window.location.href = '/another-page'; // Replace with the actual redirect URL
+  };
 
   return (
-    <Box
-      component="form"
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 2,
-        maxWidth: 500,
-        margin: 'auto',
-        padding: 4,
-        border: '1px solid #ccc',
-        borderRadius: 3,
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-        background: 'linear-gradient(135deg, #f9f9f9 0%, #e0e0e0 100%)',
-        mt: 5,
-        animation: 'fadeIn 1s ease-in-out',
-      }}
-    >
-      <Typography variant="h3" component="h1" gutterBottom>
-        Podaj
+    <Container maxWidth="sm" sx={{ textAlign: 'center', marginTop: '50px' }}>
+      <Typography variant="h4" gutterBottom>
+        Token Generator
       </Typography>
-      <span>
-        Poniewż generowanie tokenów możliwe jest do wykonania tylko na serwerze,
-        zaimplementowano funkcję symulującą logowanie.
-        <br />
-        <a href={Jwt.url} target="_blank" rel="noreferrer">
-          kliknij tutaj i wypełnij dane twojego tokena
-        </a>
-      </span>
-
-      <span>Przykładowy token</span>
-      <pre
-        style={{
-          background: '#f0f0f0',
-          padding: '10px',
-          borderRadius: '5px',
-          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-        }}
-      >
-        {JSON.stringify(Jwt.createPayload(User.createFakeUser()), null, 2)}
-      </pre>
-
-      <Input
-        placeholder="Enter your token"
-        sx={{
-          width: '100%',
-          padding: '10px',
-          borderRadius: '5px',
-          border: '1px solid #ccc',
-          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-        }}
-        onChange={(e) => {
-          setToken(e.target.value);
-        }}
-      />
       <Button
-        onClick={() => void signIn(token)}
         variant="contained"
         color="primary"
-        sx={{
-          width: '100%',
-          padding: '10px',
-          borderRadius: '5px',
-          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-          background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-          color: '#fff',
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          '&:hover': {
-            background: 'linear-gradient(135deg, #2575fc 0%, #6a11cb 100%)',
-          },
-        }}
+        onClick={handleGetToken}
+        sx={{ padding: '10px 20px', fontSize: '16px', margin: '10px' }}
       >
-        Sign In
+        Get Token
       </Button>
-    </Box>
+      {token && (
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleRedirect}
+          sx={{ padding: '10px 20px', fontSize: '16px', margin: '10px' }}
+        >
+          Redirect
+        </Button>
+      )}
+    </Container>
   );
 };
+
+export default TokenPage;
