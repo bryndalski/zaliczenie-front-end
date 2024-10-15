@@ -8,6 +8,10 @@ export const useUserStore = create<UserStoreTypes>()(
     (set) => ({
       tokenPayload: null,
       isLogged: false,
+      token: null,
+      refreshToken: null,
+      setRefreshToken: (refreshToken) => set({ refreshToken }),
+      setToken: (token) => set({ token }),
       setTokenPayload: (tokenPayload) => set({ tokenPayload }),
       setIsLogged: (isLogged) => set({ isLogged }),
       lodOut: () => set({ tokenPayload: null, isLogged: false }),
