@@ -1,47 +1,104 @@
-import React from 'react';
-
-import { Button, Container, Typography } from '@mui/material';
-
-import { TokenDisplay } from '../core/Components';
+import React, { useState } from 'react';
+import { Box, Button, Grid, Paper, TextField, Typography } from '@mui/material';
 import { useFakeAuth } from '../hooks/useFakeAuth';
-import { useUserStore } from '../stores/useUserStore/useUserStore';
 
-const TokenPage = () => {
+const Login = () => {
   const { signIn } = useFakeAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const { token } = useUserStore();
-  const handleRedirect = () => {
-    window.location.href = '/another-page'; // Replace with the actual redirect URL
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      await signIn(
+        email,
+        password
+      );
+
+
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      setError('Invalid email or password');
+    }
   };
 
   return (
-    <Container maxWidth="sm" sx={{ textAlign: 'center', marginTop: '50px' }}>
-      <Typography variant="h4" gutterBottom>
-        Token Generator
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={signIn}
-        sx={{ padding: '10px 20px', fontSize: '16px', margin: '10px' }}
-      >
-        Get Token
-      </Button>
-      {token && (
-        <>
-          <TokenDisplay />
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleRedirect}
-            sx={{ padding: '10px 20px', fontSize: '16px', margin: '10px' }}
-          >
-            Redirect
-          </Button>
-        </>
-      )}
-    </Container>
+    <Grid container component="main" sx={{ height: '100vh' }}>
+      <Grid
+        item
+        xs={false}
+        sm={4}
+        md={7}
+        sx={{
+          backgroundImage: 'url(https://picsum.photos/1000)',
+          backgroundRepeat: 'no-repeat',
+          backgroundColor: (t) =>
+            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      />
+      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Box
+          sx={{
+            my: 8,
+            mx: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box component="form" onSubmit={(e) => void handleSubmit(e)} sx={{ mt: 1 }}>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {error && (
+              <Typography color="error" variant="body2">
+                {error}
+              </Typography>
+            )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+          </Box>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 
-export default TokenPage;
+export default Login;

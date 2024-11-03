@@ -1,23 +1,19 @@
 import React from 'react';
 import { Outlet, redirect } from 'react-router-dom';
-
-import { Unauthorized } from '../../../pages/Unauthorized';
 import { ProtectedRouteWithChildren } from './ProtectedRoute.type';
-import { useProtectedRoute } from './useProtectedRoute';
+import { useUserStore } from '../../../stores/useUserStore/useUserStore';
 
 export const ProtectedRoute = (props: ProtectedRouteWithChildren) => {
-  const { isLoggedIn, canAccessProtectedRoute } = useProtectedRoute(props);
+  const { isLogged: isUserLoddegIn } = useUserStore();
 
-  if (!isLoggedIn) {
-    if (canAccessProtectedRoute) {
-      return props.children ? <>{props.children}</> : <Outlet />;
-    }
+  console.log('isLoggedIn', isUserLoddegIn);
+
+  console.log('props', props);
+
+  if (!isUserLoddegIn) {
     redirect('/login');
   }
 
-  if (!canAccessProtectedRoute) {
-    return <Unauthorized />;
-  }
 
   return props.children ? <>{props.children}</> : <Outlet />;
 };

@@ -1,20 +1,27 @@
 import { decodeToken } from 'react-jwt';
 
 import { useUserStore } from '../stores/useUserStore/useUserStore';
+import { redirect } from 'react-router-dom';
 
 export const useFakeAuth = () => {
   const { setTokenPayload, setIsLogged, setToken, setRefreshToken } =
     useUserStore();
 
-  const signIn = async () => {
+  const signIn = async (
+    email: string,
+    password: string
+  ) => {
     try {
-      const response = await fetch('http://localhost:3000/token', {
+      const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
         headers: {
           // eslint-disable-next-line @typescript-eslint/naming-convention
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: 'user' }), // Replace with actual user data if needed
+        body: JSON.stringify({
+          email,
+          password
+        }), // Replace with actual user data if needed
       });
 
       const data = (await response?.json()) as {
@@ -31,6 +38,8 @@ export const useFakeAuth = () => {
         if (decoded) {
           setTokenPayload(decoded);
           setIsLogged(true);
+          window.location.href = '/';
+
         } else {
           alert('Invalid token');
         }

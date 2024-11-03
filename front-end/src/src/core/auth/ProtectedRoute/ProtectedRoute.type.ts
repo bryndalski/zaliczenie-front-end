@@ -3,11 +3,7 @@ import { ReactNode } from 'react';
 import { UserRoles } from '../../../utils/User';
 
 export type ProtectedRouteType = {
-  /**
-   * Allowed roles to access the route
-   * @default [] - rejects all roles
-   */
-  allowedRoles?: UserRoles[];
+
 
   /**
    * Defines if route needs authentication

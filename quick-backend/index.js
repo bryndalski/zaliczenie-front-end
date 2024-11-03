@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 import { Database } from './handlers/database.js';
 import { User } from './models/user.model.js';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'youraccesstokens
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || 'yourrefreshtokensecret';
 
 
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 const generateAccessToken = (user) => {
@@ -29,7 +31,7 @@ const generateAccessToken = (user) => {
 };
 
 const generateRefreshToken = (user) => {
-  return jwt.sign(user, REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ user }, REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
 };
 
 const decodeToken = (token) => {
@@ -37,11 +39,20 @@ const decodeToken = (token) => {
 };
 
 app.post('/login', (req, res) => {
+  console.group('login');
+
   const { email, password } = req.body;
+
+  console.log('email:', email);
+  console.log('password:', password);
+
   const user = usersDb.db.find(user => user.email === email && user.password === password);
+
+  console.log('user:', user);
+
   if (user) {
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
+    const accessToken = generateAccessToken({ ...user });
+    const refreshToken = generateRefreshToken({ ...user });
 
     refreshTokensDb.add({ token: refreshToken, id: user.id });
 

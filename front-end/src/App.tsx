@@ -12,7 +12,7 @@ export const App = () => {
       <Route
         path="/"
         element={
-          <ProtectedRoute allowedRoles={[UserRoles.ADMIN, UserRoles.USER]}>
+          <ProtectedRoute >
             <AuthorizedPage />
           </ProtectedRoute>
         }
