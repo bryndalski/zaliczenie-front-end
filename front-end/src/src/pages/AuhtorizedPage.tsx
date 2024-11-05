@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Paper, Typography } from '@mui/material';
 
-export const AdminPage = () => {
+const AuthorizedPage = () => {
   return (
     <Box
       sx={{
@@ -26,18 +26,21 @@ export const AdminPage = () => {
         }}
       >
         <Typography variant="h3" component="h1" gutterBottom>
-          Main Page
+          Authorized Access
         </Typography>
         <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGiw-oVkJdu3X5FV1AifkCmRhawzHen3zTag&s"
-          alt="Main Content"
-          style={{
-            borderRadius: '10px',
-            marginBottom: '20px',
-            maxWidth: '100%',
-          }}
+          src={
+            'https://media.tenor.com/s7Tf_aL-Di0AAAAM/chipi-chipi-chapa-chapa.gif'
+          }
+          alt="Dancing Cat"
+          style={{ borderRadius: '10px', marginBottom: '20px' }}
         />
+        <Typography variant="body1" gutterBottom>
+          Welcome to the authorized page.
+        </Typography>
       </Paper>
     </Box>
   );
 };
+
+export default AuthorizedPage;
