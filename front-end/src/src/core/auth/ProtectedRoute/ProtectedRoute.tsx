@@ -10,8 +10,8 @@ export const ProtectedRoute = (props: ProtectedRouteWithChildren) => {
 
   console.log('props', props);
 
-  if (!isUserLoddegIn) {
-    redirect('/login');
+  if (!isUserLoddegIn && !props.unprotectedRoute) {
+    window.location.href = '/login';
   }
 
 
