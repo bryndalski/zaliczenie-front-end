@@ -1,11 +1,10 @@
-import { decodeToken } from 'react-jwt';
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
 
-import { useUserStore } from '../stores/useUserStore/useUserStore';
 import { redirect } from 'react-router-dom';
 
 export const useFakeAuth = () => {
-  const { setTokenPayload, setIsLogged, setToken, setRefreshToken } =
-    useUserStore();
+  const signInAuthKit = useSignIn();
+
 
   const signIn = async (
     email: string,
@@ -16,12 +15,12 @@ export const useFakeAuth = () => {
         method: 'POST',
         headers: {
           // eslint-disable-next-line @typescript-eslint/naming-convention
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email,
           password
-        }), // Replace with actual user data if needed
+        })
       });
 
       const data = (await response?.json()) as {
@@ -29,19 +28,27 @@ export const useFakeAuth = () => {
         refreshToken: string;
       };
 
+      console.log({ data });
+
       if (data) {
-        setRefreshToken(data?.refreshToken);
-        setToken(data?.accessToken);
 
-        const decoded = decodeToken(data.accessToken);
-
-        if (decoded) {
-          setTokenPayload(decoded);
-          setIsLogged(true);
-          window.location.href = '/';
-
+        console.log(data.accessToken);
+        
+        if (
+          signInAuthKit({
+            auth: {
+              token: data.accessToken,
+              type: 'Bearer'
+            },
+            userState: {
+              loggedIn: true
+            }
+          })
+        ) {
+          console.log('redirecting');
+          redirect('/');
         } else {
-          alert('Invalid token');
+          alert('invalid token');
         }
       }
     } catch (error: unknown) {
@@ -52,12 +59,11 @@ export const useFakeAuth = () => {
   };
 
   const signOut = () => {
-    setTokenPayload(null);
-    setIsLogged(false);
+
   };
 
   return {
     signIn,
-    signOut,
+    signOut
   };
 };

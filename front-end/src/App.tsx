@@ -1,31 +1,16 @@
-import React from 'react';
+import AuthOutlet from '@auth-kit/react-router/AuthOutlet';
 import { Route, Routes } from 'react-router-dom';
-
-import { ProtectedRoute } from './src/core/auth/ProtectedRoute/ProtectedRoute';
-import AuthorizedPage from './src/pages/AuhtorizedPage';
 import LogIn from './src/pages/LogIn';
-import { UserRoles } from './src/utils/User';
+import { LoggedIn } from './src/pages/LoggedIn';
+
 
 export const App = () => {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute >
-            <AuthorizedPage />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/login"
-        element={
-          <ProtectedRoute unprotectedRoute={true}>
-            <LogIn />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/login" element={<LogIn />} />
+      <Route element={<AuthOutlet fallbackPath="/login" />}>
+        <Route path="/" element={<LoggedIn />} />
+      </Route>
     </Routes>
   );
 };
